@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TrapHighlight from "../components/TrapHighlight";
 import VerdictCard from "../components/VerdictCard";
 import VerdictAudio from "../components/VerdictAudio";
@@ -58,6 +58,15 @@ const EXHIBIT_CHIPS = [
 
 export default function Home() {
   const [tab, setTab] = useState<TabId>("text");
+  // The nav "Open a case" button only appears after scrolling past the hero,
+  // so the first viewport keeps a single dominant CTA.
+  const [showNavCta, setShowNavCta] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setShowNavCta(window.scrollY > 560);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -135,7 +144,11 @@ export default function Home() {
             </nav>
             <a
               href="#analyzer"
-              className="rounded-md border border-brand/60 px-3.5 py-1.5 text-sm font-semibold text-brand transition-colors hover:bg-brand/10"
+              className={`rounded-md border border-brand/60 px-3.5 py-1.5 text-sm font-semibold text-brand transition-all hover:bg-brand/10 ${
+                showNavCta
+                  ? "translate-y-0 opacity-100"
+                  : "pointer-events-none -translate-y-1 opacity-0"
+              }`}
             >
               Open a case
             </a>
@@ -357,9 +370,14 @@ export default function Home() {
                       )}
                     </div>
                   ) : (
-                    <p className="font-mono text-xs leading-relaxed text-slate-500">
-                      Awaiting evidence — paste a message to open the case.
-                    </p>
+                    <div className="rounded-md border border-white/10 bg-ink/60 p-5">
+                      <p className="font-mono text-[11px] tracking-[0.25em] text-slate-500">
+                        NO EVIDENCE LOGGED
+                      </p>
+                      <p className="mt-2 font-mono text-xs leading-relaxed text-slate-500">
+                        Awaiting evidence — paste a message to open the case.
+                      </p>
+                    </div>
                   )}
                 </div>
               </div>
@@ -379,7 +397,7 @@ export default function Home() {
             {TRAPS.map((t, i) => (
               <li
                 key={t.title}
-                className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 border-b border-white/10 py-4 md:grid-cols-[3.5rem_14rem_1fr] md:gap-x-6"
+                className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 border-b border-white/10 py-4 md:grid-cols-[3.5rem_11rem_1fr] md:gap-x-6"
               >
                 <span className="font-mono text-sm text-brand">
                   {String(i + 1).padStart(2, "0")}
