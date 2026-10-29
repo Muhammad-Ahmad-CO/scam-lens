@@ -43,50 +43,42 @@ function getConfig(): ProviderConfig {
   };
 }
 
-/**
- * Call the configured Muse model and return the reply parsed as JSON.
- * Uses an OpenAI-style chat-completions request with low temperature.
- * If the provider ignores response_format, the prompt still asks for
- * strict JSON, and code fences are stripped before parsing.
- */
-export async function sparkJson(
-  systemPrompt: string,
-  userContent: string
+interface ChatMessage {
+  role: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  content: any;
+}
+
+async function postChatCompletion(
+  cfg: ProviderConfig,
+  messages: ChatMessage[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> {
-  const { provider, baseUrl, apiKey, model } = getConfig();
-
-  const res = await fetch(`${baseUrl}/chat/completions`, {
+  const res = await fetch(`${cfg.baseUrl}/chat/completions`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${cfg.apiKey}`,
     },
     body: JSON.stringify({
-      model,
+      model: cfg.model,
       temperature: 0.2,
       response_format: { type: "json_object" },
-      messages: [
-        {
-          role: "system",
-          content: systemPrompt + "\nReply with strict JSON only. No other text.",
-        },
-        { role: "user", content: userContent },
-      ],
+      messages,
     }),
   });
 
   if (!res.ok) {
     const text = await res.text().catch(() => "");
     throw new Error(
-      `${provider} API error ${res.status}: ${text.slice(0, 300)}`
+      `${cfg.provider} API error ${res.status}: ${text.slice(0, 300)}`
     );
   }
 
   const data = await res.json();
   const content: unknown = data?.choices?.[0]?.message?.content;
   if (typeof content !== "string" || !content.trim()) {
-    throw new Error(`${provider} returned an empty response`);
+    throw new Error(`${cfg.provider} returned an empty response`);
   }
 
   const cleaned = content
@@ -98,7 +90,59 @@ export async function sparkJson(
     return JSON.parse(cleaned);
   } catch {
     throw new Error(
-      `${provider} did not return valid JSON: ${cleaned.slice(0, 300)}`
+      `${cfg.provider} did not return valid JSON: ${cleaned.slice(0, 300)}`
     );
   }
+}
+
+/**
+ * Call the configured Muse model and return the reply parsed as JSON.
+ * Uses an OpenAI-style chat-completions request with low temperature.
+ * If the provider ignores response_format, the prompt still asks for
+ * strict JSON, and code fences are stripped before parsing.
+ */
+export async function sparkJson(
+  systemPrompt: string,
+  userContent: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any> {
+  const cfg = getConfig();
+  return postChatCompletion(cfg, [
+    {
+      role: "system",
+      content: systemPrompt + "\nReply with strict JSON only. No other text.",
+    },
+    { role: "user", content: userContent },
+  ]);
+}
+
+/**
+ * Same as sparkJson but with an image attached (OpenAI-style image_url part).
+ * Used to read SMS screenshots into text. Same provider switch:
+ * muse-spark-1.3 on meta, BASETEN_MODEL on baseten (base64 OpenAI-style).
+ */
+export async function sparkVisionJson(
+  systemPrompt: string,
+  userText: string,
+  imageBase64: string,
+  mimeType: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any> {
+  const cfg = getConfig();
+  return postChatCompletion(cfg, [
+    {
+      role: "system",
+      content: systemPrompt + "\nReply with strict JSON only. No other text.",
+    },
+    {
+      role: "user",
+      content: [
+        { type: "text", text: userText },
+        {
+          type: "image_url",
+          image_url: { url: `data:${mimeType};base64,${imageBase64}` },
+        },
+      ],
+    },
+  ]);
 }

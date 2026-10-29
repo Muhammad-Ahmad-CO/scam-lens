@@ -3,7 +3,10 @@
 import { useState } from "react";
 import TrapHighlight from "../components/TrapHighlight";
 import VerdictCard from "../components/VerdictCard";
-import type { DisplayVerdict, TrapSignal } from "../lib/verdict";
+import VerdictAudio from "../components/VerdictAudio";
+import PhotoInput from "../components/PhotoInput";
+import VoiceInput from "../components/VoiceInput";
+import type { AnalyzeResult } from "../lib/verdict";
 
 type TabId = "text" | "photo" | "voice";
 
@@ -13,25 +16,30 @@ const TABS: { id: TabId; label: string }[] = [
   { id: "voice", label: "Upload voice note" },
 ];
 
-interface AnalyzeResult {
-  verdict: DisplayVerdict;
-  signals: TrapSignal[];
-  explanation_en: string;
-  safe_action: string;
-}
-
 export default function Home() {
   const [tab, setTab] = useState<TabId>("text");
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AnalyzeResult | null>(null);
-  const [checkedText, setCheckedText] = useState("");
 
-  async function checkMessage() {
-    setLoading(true);
+  function handleStart() {
     setError(null);
     setResult(null);
+  }
+
+  function handleResult(r: AnalyzeResult) {
+    setError(null);
+    setResult(r);
+  }
+
+  function handleError(msg: string) {
+    setError(msg || null);
+  }
+
+  async function checkMessage() {
+    handleStart();
+    setLoading(true);
     try {
       const res = await fetch("/api/analyze", {
         method: "POST",
@@ -44,17 +52,17 @@ export default function Home() {
           typeof data?.error === "string" ? data.error : "Analysis failed."
         );
       }
-      setCheckedText(text);
-      setResult({
+      handleResult({
         verdict: data.verdict,
         signals: Array.isArray(data.signals) ? data.signals : [],
         explanation_en:
           typeof data.explanation_en === "string" ? data.explanation_en : "",
         safe_action:
           typeof data.safe_action === "string" ? data.safe_action : "",
+        source_text: typeof data.source_text === "string" ? data.source_text : text,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      handleError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -111,66 +119,53 @@ export default function Home() {
             >
               {loading ? "Analyzing…" : "Check message"}
             </button>
-            {error && (
-              <p className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">
-                {error}
-              </p>
-            )}
           </div>
         )}
 
         {tab === "photo" && (
-          <div>
-            <span className="text-sm font-medium text-gray-700">
-              Screenshot of the message
-            </span>
-            <div className="mt-2 rounded-lg border border-dashed border-gray-300 bg-gray-50 p-6 text-center text-sm text-gray-500">
-              Photo upload comes here.
-            </div>
-            <p className="mt-3 text-xs text-gray-500">
-              Day 3: Spark vision reads the SMS screenshot into text.
-            </p>
-          </div>
+          <PhotoInput
+            onResult={handleResult}
+            onError={handleError}
+            onStart={handleStart}
+          />
         )}
 
         {tab === "voice" && (
-          <div>
-            <span className="text-sm font-medium text-gray-700">
-              Voice note file
-            </span>
-            <div className="mt-2 rounded-lg border border-dashed border-gray-300 bg-gray-50 p-6 text-center text-sm text-gray-500">
-              Voice-note upload comes here (file only, no live mic).
-            </div>
-            <p className="mt-3 text-xs text-gray-500">
-              Day 3: the voice note is transcribed, then goes through the same
-              pipeline.
-            </p>
-          </div>
+          <VoiceInput
+            onResult={handleResult}
+            onError={handleError}
+            onStart={handleStart}
+          />
+        )}
+
+        {error && (
+          <p className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+            {error}
+          </p>
         )}
       </div>
 
       <section className="mt-8">
         {result ? (
           <div>
-            <TrapHighlight text={checkedText} signals={result.signals} />
+            <TrapHighlight text={result.source_text} signals={result.signals} />
             <VerdictCard
               verdict={result.verdict}
               explanation={result.explanation_en}
               safeAction={result.safe_action}
             />
+            <VerdictAudio explanationEn={result.explanation_en} />
           </div>
         ) : (
-          tab === "text" && (
-            <div className="rounded-xl border border-dashed border-gray-300 bg-white p-5">
-              <h2 className="text-lg font-semibold">Verdict</h2>
-              <p className="mt-2 text-sm text-gray-500">
-                Your result appears here — RED &ldquo;Suspicious — do not
-                trust&rdquo;, AMBER &ldquo;Can&apos;t verify&rdquo;, or grey
-                &ldquo;Looks consistent&rdquo;. ScamLens never says
-                &ldquo;safe&rdquo;.
-              </p>
-            </div>
-          )
+          <div className="rounded-xl border border-dashed border-gray-300 bg-white p-5">
+            <h2 className="text-lg font-semibold">Verdict</h2>
+            <p className="mt-2 text-sm text-gray-500">
+              Your result appears here — RED &ldquo;Suspicious — do not
+              trust&rdquo;, AMBER &ldquo;Can&apos;t verify&rdquo;, or grey
+              &ldquo;Looks consistent&rdquo;. ScamLens never says
+              &ldquo;safe&rdquo;.
+            </p>
+          </div>
         )}
       </section>
     </main>

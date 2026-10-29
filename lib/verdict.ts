@@ -15,6 +15,16 @@ export interface TrapSignal {
   why: string;
 }
 
+/** Full result of one /api/analyze call, shared by the API route and the UI. */
+export interface AnalyzeResult {
+  verdict: DisplayVerdict;
+  signals: TrapSignal[];
+  explanation_en: string;
+  safe_action: string;
+  /** The text that was actually analyzed: pasted text, OCR text, or transcript. */
+  source_text: string;
+}
+
 const AMBER_CANNOT_VERIFY: DisplayVerdict = {
   level: "amber",
   title: "Can't verify",
