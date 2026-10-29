@@ -47,13 +47,16 @@ export default function AnatomyVisual({ signals }: { signals: string[] }) {
 
   if (imgSrc) {
     return (
-      <div className="mt-6 rounded-2xl border border-white/10 bg-panel p-5">
+      <div className="mt-6 rounded-md border border-white/10 bg-ink p-4">
+        <p className="font-mono text-[11px] tracking-widest text-slate-500">
+          EXHIBIT B — ANATOMY OF THE TRAP
+        </p>
         <img
           src={imgSrc}
           alt="Diagram showing how this scam tries to trick a victim, step by step"
-          className="w-full rounded-xl"
+          className="mt-3 w-full rounded-md"
         />
-        <p className="mt-3 text-sm text-slate-400">
+        <p className="mt-3 font-mono text-[11px] text-slate-500">
           How this scam tries to trick you — generated visual.
         </p>
       </div>
@@ -65,9 +68,9 @@ export default function AnatomyVisual({ signals }: { signals: string[] }) {
       <button
         onClick={draw}
         disabled={busy}
-        className="rounded-full border border-brand/50 px-5 py-2 text-sm font-semibold text-brand transition-colors hover:bg-brand/10 disabled:cursor-not-allowed disabled:opacity-50"
+        className="rounded-md border border-brand/50 px-5 py-2 font-mono text-xs tracking-wide text-brand transition-colors hover:bg-brand/10 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {busy ? "Drawing the scam anatomy…" : "See how this scam works"}
+        {busy ? "Drawing the scam anatomy…" : "SEE HOW THIS SCAM WORKS"}
       </button>
     </div>
   );

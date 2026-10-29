@@ -5,7 +5,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#060B16",
+        ink: "#070C18",
         navy: "#0A1224",
         panel: "#0D1526",
         brand: "#F5A524",
@@ -15,6 +15,7 @@ const config: Config = {
       fontFamily: {
         display: ["var(--font-display)", "sans-serif"],
         sans: ["var(--font-body)", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
     },
   },

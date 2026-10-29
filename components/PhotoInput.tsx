@@ -92,8 +92,8 @@ export default function PhotoInput({ onResult, onError, onStart }: Props) {
 
   return (
     <div>
-      <span className="text-sm font-medium text-slate-300">
-        Screenshot of the message
+      <span className="font-mono text-[11px] tracking-widest text-slate-500">
+        EVIDENCE — PHOTO
       </span>
       <input
         ref={inputRef}
@@ -108,11 +108,18 @@ export default function PhotoInput({ onResult, onError, onStart }: Props) {
       <button
         onClick={() => inputRef.current?.click()}
         disabled={busy !== null}
-        className="mt-2 block w-full rounded-xl border border-dashed border-white/20 bg-ink p-6 text-center text-sm text-slate-400 transition-colors hover:border-brand/60 hover:text-slate-200 disabled:cursor-not-allowed disabled:opacity-60"
+        className="mt-2 block w-full rounded-md border border-white/15 bg-ink p-6 text-center transition-colors hover:border-brand/50 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {busy ?? "Tap to choose a photo of the SMS"}
+        <span className="block text-sm font-medium text-slate-200">
+          {busy ?? "Choose a photo of the SMS"}
+        </span>
+        {!busy && (
+          <span className="mt-1 block font-mono text-[11px] text-slate-500">
+            JPG / PNG — read on your device
+          </span>
+        )}
       </button>
-      <p className="mt-3 text-xs text-slate-500">
+      <p className="mt-3 font-mono text-[11px] leading-relaxed text-slate-600">
         Spark vision reads the text from your screenshot, then runs the same
         scam check.
       </p>

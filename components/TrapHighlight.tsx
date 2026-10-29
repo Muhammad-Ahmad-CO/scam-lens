@@ -74,10 +74,10 @@ export default function TrapHighlight({
     const style = TYPE_STYLES[m.signal.type] ?? FALLBACK_STYLE;
     parts.push(
       <span key={`s${i}`}>
-        <span className="mr-1 inline-block rounded border border-white/15 bg-white/10 px-1 align-middle text-[10px] font-semibold uppercase tracking-wide text-slate-300">
+        <span className="mr-1 inline-block rounded-sm border border-white/15 bg-white/10 px-1 align-middle font-mono text-[10px] text-slate-300">
           {labelFor(m.signal.type)}
         </span>
-        <mark title={m.signal.why} className={`rounded border-b-2 px-0.5 ${style}`}>
+        <mark title={m.signal.why} className={`rounded-sm border-b-2 px-0.5 ${style}`}>
           {text.slice(m.start, m.end)}
         </mark>
       </span>
@@ -90,23 +90,23 @@ export default function TrapHighlight({
 
   return (
     <div>
-      <h3 className="text-sm font-semibold uppercase tracking-[0.15em] text-slate-300">
-        {kept.length > 0 ? "Traps found in your message" : "Your message"}
-      </h3>
-      <p className="mt-3 whitespace-pre-wrap rounded-xl border border-white/10 bg-ink p-4 text-sm leading-relaxed text-slate-200">
+      <p className="font-mono text-[11px] tracking-widest text-slate-500">
+        {kept.length > 0 ? "EXHIBIT A — TRAPS MARKED" : "EXHIBIT A — MESSAGE"}
+      </p>
+      <p className="mt-3 whitespace-pre-wrap rounded-md border border-white/10 bg-ink p-4 text-sm leading-relaxed text-slate-200">
         {parts.length > 0 ? parts : text}
       </p>
       {signals.length > 0 && (
-        <ul className="mt-4 space-y-2.5">
+        <ul className="mt-4 border-t border-white/10">
           {signals.map((s, i) => (
             <li
               key={i}
-              className="rounded-lg border border-white/10 bg-white/5 p-3 text-sm"
+              className="border-b border-white/10 py-2.5 text-sm"
             >
-              <span className="font-semibold text-brand">
-                {labelFor(s.type)}:
-              </span>{" "}
-              <span className="text-slate-300">{s.why}</span>
+              <span className="font-mono text-[11px] text-brand">
+                trap_{String(i + 1).padStart(2, "0")} / {labelFor(s.type)}
+              </span>
+              <span className="mt-0.5 block text-slate-300">{s.why}</span>
             </li>
           ))}
         </ul>

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { Space_Grotesk, Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
-import "./hero-bg.css";
 
 const display = Space_Grotesk({
   subsets: ["latin"],
@@ -12,6 +11,13 @@ const display = Space_Grotesk({
 const body = Inter({
   subsets: ["latin"],
   variable: "--font-body",
+  display: "swap",
+});
+
+const mono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -27,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`}>
+    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <body className="font-sans antialiased">{children}</body>
     </html>
   );
