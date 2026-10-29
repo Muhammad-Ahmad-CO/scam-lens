@@ -64,16 +64,19 @@ export default function VerdictAudio({
   }
 
   return (
-    <div className="mt-4 rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-      <div className="flex flex-wrap items-center gap-3">
-        <label htmlFor="voice-lang" className="text-sm font-medium text-gray-700">
+    <div className="mt-6 rounded-2xl border border-white/10 bg-panel p-5 md:p-6">
+      <h3 className="text-sm font-semibold uppercase tracking-[0.15em] text-slate-300">
+        Hear the verdict
+      </h3>
+      <div className="mt-3 flex flex-wrap items-center gap-3">
+        <label htmlFor="voice-lang" className="text-sm text-slate-400">
           Listen in:
         </label>
         <select
           id="voice-lang"
           value={lang}
           onChange={(e) => setLang(e.target.value)}
-          className="rounded-lg border border-gray-300 p-2 text-sm"
+          className="rounded-lg border border-white/15 bg-ink p-2 text-sm text-slate-200"
         >
           {VOICE_LANGUAGES.map((l) => (
             <option key={l.code} value={l.code}>
@@ -86,13 +89,13 @@ export default function VerdictAudio({
         <button
           onClick={listen}
           disabled={busy}
-          className="rounded-full bg-black px-5 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-full bg-brand px-5 py-2 text-sm font-semibold text-ink hover:bg-[#ffbe45] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {busy ? "Loading…" : "Listen to verdict"}
         </button>
       </div>
-      {status && <p className="mt-3 text-sm text-gray-700">{status}</p>}
-      <p className="mt-2 text-xs text-gray-500">
+      {status && <p className="mt-3 text-sm text-slate-300">{status}</p>}
+      <p className="mt-2 text-xs text-slate-500">
         The written verdict above never changes — only the spoken voice does.
       </p>
     </div>

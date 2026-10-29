@@ -3,9 +3,15 @@
 import type { DisplayVerdict } from "../lib/verdict";
 
 const LEVEL_STYLES: Record<DisplayVerdict["level"], string> = {
-  red: "border-red-300 bg-red-50 text-red-900",
-  amber: "border-amber-300 bg-amber-50 text-amber-900",
-  grey: "border-gray-300 bg-gray-100 text-gray-800",
+  red: "border-danger/50 bg-danger/10",
+  amber: "border-brand/50 bg-brand/10",
+  grey: "border-white/15 bg-white/5",
+};
+
+const LEVEL_ACCENT: Record<DisplayVerdict["level"], string> = {
+  red: "text-[#ff8589]",
+  amber: "text-brand",
+  grey: "text-slate-300",
 };
 
 export default function VerdictCard({
@@ -18,23 +24,26 @@ export default function VerdictCard({
   safeAction: string;
 }) {
   const style = LEVEL_STYLES[verdict.level] ?? LEVEL_STYLES.amber;
+  const accent = LEVEL_ACCENT[verdict.level] ?? LEVEL_ACCENT.amber;
 
   return (
-    <div className={`mt-6 rounded-xl border p-5 ${style}`}>
-      <p className="text-xs font-semibold uppercase tracking-wide opacity-70">
+    <div className={`mt-6 rounded-2xl border p-6 md:p-7 ${style}`}>
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
         Verdict
       </p>
-      <h2 className="mt-1 text-2xl font-bold">{verdict.title}</h2>
-      <p className="mt-1 text-sm opacity-80">{verdict.description}</p>
+      <h2 className={`mt-2 font-display text-3xl font-bold ${accent}`}>
+        {verdict.title}
+      </h2>
+      <p className="mt-1 text-sm text-slate-300">{verdict.description}</p>
 
-      <p className="mt-4 text-sm leading-relaxed">{explanation}</p>
+      <p className="mt-4 leading-relaxed text-slate-200">{explanation}</p>
 
-      <div className="mt-4 rounded-lg bg-white/70 p-4">
-        <h3 className="text-sm font-semibold">What to do</h3>
-        <p className="mt-1 text-sm">{safeAction}</p>
+      <div className="mt-5 rounded-xl border border-white/10 bg-ink/70 p-4">
+        <h3 className="text-sm font-semibold text-white">What to do</h3>
+        <p className="mt-1 text-sm text-slate-300">{safeAction}</p>
       </div>
 
-      <p className="mt-4 text-xs opacity-70">
+      <p className="mt-4 text-xs text-slate-400">
         ScamLens never says a message is safe — when unsure, it says it
         can&apos;t verify.
       </p>
