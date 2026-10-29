@@ -4,6 +4,7 @@ import { useState } from "react";
 import TrapHighlight from "../components/TrapHighlight";
 import VerdictCard from "../components/VerdictCard";
 import VerdictAudio from "../components/VerdictAudio";
+import AnatomyVisual from "../components/AnatomyVisual";
 import PhotoInput from "../components/PhotoInput";
 import VoiceInput from "../components/VoiceInput";
 import type { AnalyzeResult } from "../lib/verdict";
@@ -154,6 +155,9 @@ export default function Home() {
               explanation={result.explanation_en}
               safeAction={result.safe_action}
             />
+            {result.verdict.level === "red" && (
+              <AnatomyVisual signals={result.signals.map((s) => s.type)} />
+            )}
             <VerdictAudio explanationEn={result.explanation_en} />
           </div>
         ) : (
