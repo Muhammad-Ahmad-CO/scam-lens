@@ -151,11 +151,9 @@ export default function Home() {
 
       {/* ── Hero ──────────────────────────────────────────────────── */}
       <section id="top" className="relative overflow-hidden">
-        <img
-          src="/hero.webp"
-          alt=""
+        <div
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover"
+          className="scamlens-hero absolute inset-0 h-full w-full"
         />
         <div className="absolute inset-0 bg-ink/75" />
         <div className="relative mx-auto max-w-6xl px-4 py-20 md:py-28">
