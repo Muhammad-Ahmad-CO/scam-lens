@@ -5,12 +5,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#070C18",
-        navy: "#0A1224",
-        panel: "#0D1526",
-        brand: "#F5A524",
+        ink: "#100D09",
+        navy: "#171009",
+        panel: "#1B140E",
+        brand: "#D9483B",
         danger: "#E5484D",
-        slate: "#C7D0E0",
+        slate: "#E9DCC3",
+        cream: "#F7F1E3",
       },
       fontFamily: {
         display: ["var(--font-display)", "sans-serif"],

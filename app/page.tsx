@@ -175,7 +175,7 @@ export default function Home() {
             <div className="mt-7 flex flex-wrap items-center gap-5">
               <a
                 href="#analyzer"
-                className="rounded-md bg-brand px-6 py-3 font-semibold text-ink transition-colors hover:bg-[#ffbe45]"
+                className="rounded-md bg-brand px-6 py-3 font-semibold text-ink transition-colors hover:bg-[#E85A45]"
               >
                 Open a case
               </a>
@@ -215,11 +215,11 @@ export default function Home() {
               </p>
               <p className="mt-1 rounded-md border border-white/10 bg-ink p-3 text-sm leading-relaxed text-slate-200">
                 Your account{" "}
-                <mark className="rounded-sm border-b-2 border-brand/60 bg-brand/20 px-1 text-amber-100">
+                <mark className="rounded-sm border-b-2 border-brand/60 bg-brand/20 px-1 text-[#F7C9C2]">
                   will be blocked within 24 hours
                 </mark>
                 . Verify now:{" "}
-                <mark className="rounded-sm border-b-2 border-brand/60 bg-brand/20 px-1 text-amber-100">
+                <mark className="rounded-sm border-b-2 border-brand/60 bg-brand/20 px-1 text-[#F7C9C2]">
                   bit.ly/xyz12
                 </mark>{" "}
                 —{" "}
@@ -312,7 +312,7 @@ export default function Home() {
                         className={
                           "mt-3 rounded-md px-6 py-2.5 text-sm font-semibold transition-colors " +
                           (canCheck
-                            ? "bg-brand text-ink hover:bg-[#ffbe45]"
+                            ? "bg-brand text-ink hover:bg-[#E85A45]"
                             : "cursor-not-allowed bg-slate-700/70 text-slate-400")
                         }
                       >

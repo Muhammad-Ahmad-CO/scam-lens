@@ -14,18 +14,18 @@ const TYPE_LABELS: Record<string, string> = {
   off_platform_move: "Off-platform move",
 };
 
-// Two highlight colors: red for the most dangerous signals, amber for the rest.
+// Two highlight colors: red for the most dangerous signals, crimson for the rest.
 const TYPE_STYLES: Record<string, string> = {
   fake_sender: "bg-danger/25 text-red-100 border-danger/60",
-  urgency_threat: "bg-brand/20 text-amber-100 border-brand/60",
-  short_link: "bg-brand/20 text-amber-100 border-brand/60",
+  urgency_threat: "bg-brand/20 text-[#F7C9C2] border-brand/60",
+  short_link: "bg-brand/20 text-[#F7C9C2] border-brand/60",
   otp_demand: "bg-danger/25 text-red-100 border-danger/60",
-  prize_lure: "bg-brand/20 text-amber-100 border-brand/60",
+  prize_lure: "bg-brand/20 text-[#F7C9C2] border-brand/60",
   impersonation: "bg-danger/25 text-red-100 border-danger/60",
-  off_platform_move: "bg-brand/20 text-amber-100 border-brand/60",
+  off_platform_move: "bg-brand/20 text-[#F7C9C2] border-brand/60",
 };
 
-const FALLBACK_STYLE = "bg-brand/20 text-amber-100 border-brand/60";
+const FALLBACK_STYLE = "bg-brand/20 text-[#F7C9C2] border-brand/60";
 
 function labelFor(type: string): string {
   return TYPE_LABELS[type] ?? type.replace(/_/g, " ");

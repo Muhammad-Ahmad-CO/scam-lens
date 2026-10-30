@@ -89,7 +89,7 @@ export default function VerdictAudio({
         <button
           onClick={listen}
           disabled={busy}
-          className="rounded-md bg-brand px-5 py-2 text-sm font-semibold text-ink transition-colors hover:bg-[#ffbe45] disabled:cursor-not-allowed disabled:bg-slate-700/70 disabled:text-slate-400"
+          className="rounded-md bg-brand px-5 py-2 text-sm font-semibold text-ink transition-colors hover:bg-[#E85A45] disabled:cursor-not-allowed disabled:bg-slate-700/70 disabled:text-slate-400"
         >
           {busy ? "Loading…" : "Listen to verdict"}
         </button>

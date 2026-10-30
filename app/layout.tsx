@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter, IBM_Plex_Mono } from "next/font/google";
+import { Fraunces, Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
-const display = Space_Grotesk({
+const display = Fraunces({
   subsets: ["latin"],
+  weight: ["600", "700"],
   variable: "--font-display",
   display: "swap",
 });
